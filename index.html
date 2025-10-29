@@ -17,7 +17,6 @@
       justify-content: space-between;
     }
 
-    /* Encabezado */
     header {
       display: flex;
       justify-content: space-between;
@@ -37,7 +36,6 @@
       margin-left: 10px;
     }
 
-    /* Contenedor principal */
     .main-panel {
       display: flex;
       justify-content: center;
@@ -47,7 +45,6 @@
       margin: 20px;
     }
 
-    /* Panel de control */
     .control-panel {
       background: rgba(255, 255, 255, 0.05);
       border: 2px solid #0d6efd;
@@ -104,7 +101,6 @@
       text-shadow: 0 0 8px #0d6efd;
     }
 
-    /* Panel central de datos */
     .data-panel {
       background: rgba(255, 255, 255, 0.05);
       border: 2px solid #0d6efd;
@@ -140,11 +136,16 @@
       font-size: 0.9rem;
       box-shadow: 0 -2px 10px rgba(13,110,253,0.3);
     }
+
+    /* Botón obstáculo */
+    .obstacle-panel {
+      text-align: center;
+      margin: 30px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Encabezado -->
   <header>
     <h2>Control IoT Carrito</h2>
     <div>
@@ -154,10 +155,8 @@
     </div>
   </header>
 
-  <!-- Contenedor principal -->
   <div class="main-panel">
     
-    <!-- Movimientos básicos -->
     <div class="control-panel">
       <div class="control-grid mb-3">
         <div></div>
@@ -189,7 +188,6 @@
       </div>
     </div>
 
-    <!-- Panel central de datos -->
     <div class="data-panel">
       <div class="data-title">Último Movimiento</div>
       <div id="last-movement" class="data-item">Cargando...</div>
@@ -198,9 +196,7 @@
       <div id="last-obstacle" class="data-item">Cargando...</div>
     </div>
 
-    <!-- Movimientos de giro -->
     <div class="control-panel">
-      <!-- Giros 90° adelante -->
       <div class="section-title">Giros 90° Adelante</div>
       <div class="d-flex justify-content-around mb-3">
         <div class="text-center">
@@ -213,7 +209,6 @@
         </div>
       </div>
 
-      <!-- Giros 90° atrás -->
       <div class="section-title">Giros 90° Atrás</div>
       <div class="d-flex justify-content-around mb-3">
         <div class="text-center">
@@ -226,7 +221,6 @@
         </div>
       </div>
 
-      <!-- Giros 360° -->
       <div class="section-title">Giros 360°</div>
       <div class="d-flex justify-content-around">
         <div class="text-center">
@@ -242,92 +236,99 @@
 
   </div>
 
-  <!-- Pie de página -->
+  <!-- Panel Obstáculo -->
+  <div class="obstacle-panel">
+    <label for="tipoObstaculo" class="form-label">Tipo de Obstáculo:</label>
+    <input type="text" id="tipoObstaculo" class="form-control mb-2" value="Izquierda" style="max-width: 200px; margin:auto;">
+    <button class="btn btn-warning" onclick="sendObstacle()">Obstáculo</button>
+  </div>
+
   <footer>
-    © 2025 Control IoT Carrito | Desarrollado con ❤️ y Bootstrap 5
+    © 2025 Control IoT Carrito | Moedano Mejia Julio Eduardo 20200197
   </footer>
 
   <script>
+    const id_dispositivo = 1;
+
     async function fetchLastMovement() {
-    try {
+      try {
         const res = await fetch('http://18.204.20.70:5500/api/ultimos');
         const data = await res.json();
         if(data.length > 0) {
-        const last = data[0];
-        document.getElementById('last-movement').innerHTML = `
+          const last = data[0];
+          document.getElementById('last-movement').innerHTML = `
             <strong>Movimiento:</strong> ${last.nombre_movimiento} <br>
             <strong>Fecha:</strong> ${new Date(last.fecha_evento).toLocaleString()}
-        `;
+          `;
         } else {
-        document.getElementById('last-movement').textContent = 'Sin datos';
+          document.getElementById('last-movement').textContent = 'Sin datos';
         }
-    } catch(err) {
+      } catch(err) {
         document.getElementById('last-movement').textContent = 'Error al cargar';
-    }
+      }
     }
 
     async function fetchLastObstacle() {
-    try {
+      try {
         const res = await fetch('http://18.204.20.70:5500/api/obstaculos');
         const data = await res.json();
         if(data.length > 0) {
-        const last = data[0];
-        document.getElementById('last-obstacle').innerHTML = `
+          const last = data[0];
+          document.getElementById('last-obstacle').innerHTML = `
             <strong>Obstáculo:</strong> ${last.obstaculo_detectado} <br>
             <strong>Resultado:</strong> ${last.resultado}
-        `;
+          `;
         } else {
-        document.getElementById('last-obstacle').textContent = 'Sin datos';
+          document.getElementById('last-obstacle').textContent = 'Sin datos';
         }
-    } catch(err) {
+      } catch(err) {
         document.getElementById('last-obstacle').textContent = 'Error al cargar';
-    }
+      }
     }
 
-    // ID del dispositivo, puedes cambiarlo según tu dispositivo real
-    const id_dispositivo = 1;
-
-    // Función para enviar movimiento
     async function sendMovement(id_movimiento) {
-    try {
-        const res = await fetch('http://18.204.20.70:5500/api/movimiento', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id_dispositivo: id_dispositivo,
-            id_movimiento: id_movimiento,
-            estatus: 'Ejecutado'
-        })
+      try {
+        await fetch('http://18.204.20.70:5500/api/movimiento', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id_dispositivo: id_dispositivo, id_movimiento: id_movimiento, estatus: 'Ejecutado' })
         });
-
-        if(res.ok) {
-        // alert(`Movimiento ${id_movimiento} ejecutado correctamente`);
-        } else {
-        alert('Error al enviar movimiento');
-        }
-    } catch(err) {
+      } catch(err) {
         console.error(err);
         alert('Error en la conexión con la API');
-    }
+      }
     }
 
-    // Agregar eventos a todos los botones de control
+    function sendObstacle() {
+      const tipo = document.getElementById('tipoObstaculo').value || "Izquierda";
+      fetch('http://18.204.20.70:5500//api/obstaculo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_dispositivo: id_dispositivo,
+          tipo_obstaculo: tipo,
+          movimiento_realizado: tipo,
+          resultado: "Ruta despejada"
+        })
+      })
+      .then(res => {
+        if(res.ok) alert('Obstáculo enviado correctamente');
+        else alert('Error al enviar obstáculo');
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Error en la conexión con la API');
+      });
+    }
+
     document.querySelectorAll('.btn-control').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const movimientoId = btn.getAttribute('data-id');
-        sendMovement(movimientoId);
-    });
+      btn.addEventListener('click', () => sendMovement(btn.getAttribute('data-id')));
     });
 
-    // Actualizar al cargar
     fetchLastMovement();
     fetchLastObstacle();
-
-    // Opcional: refrescar cada 5 segundos
-    setInterval(fetchLastMovement, 100);
-    setInterval(fetchLastObstacle, 100);
+    setInterval(fetchLastMovement, 5000);
+    setInterval(fetchLastObstacle, 5000);
   </script>
 
 </body>
