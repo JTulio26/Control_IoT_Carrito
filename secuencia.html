@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secuencias IoT</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/secuencia.css">
+</head>
+
+<body>
+
+  <!-- Encabezado -->
+  <header>
+    <h2>Secuencias IoT</h2>
+    <div>
+      <button class="btn btn-primary" onclick="location.href='index.html'">Control</button>
+      <button class="btn btn-primary" onclick="location.href='secuencia.html'">Secuencias</button>
+      <button class="btn btn-secondary" onclick="location.href='monitoreo.html'">Monitoreo</button>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <div class="main-panel container">
+
+    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalSecuencia">
+      <i class="bi bi-plus-circle"></i> Crear Secuencia
+    </button>
+
+    <!-- Monitoreo de Obstáculo -->
+    <div class="monitor-container">
+      <div class="monitor-title">Último Obstáculo Detectado</div>
+      <p><strong>Fecha:</strong> <span id="obst-fecha">--</span></p>
+      <p><strong>Obstáculo Detectado:</strong> <span id="obst-tipo">--</span></p>
+      <p><strong>Movimiento Realizado:</strong> <span id="obst-movimiento">--</span></p>
+    </div>
+
+    <!-- Tabla de secuencias -->
+    <div class="table-container">
+      <div class="table-title">Secuencias Guardadas</div>
+
+      <table class="table table-dark table-striped table-hover align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Movimientos</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody id="sequences-table">
+          <tr><td colspan="4">Cargando datos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Pie de página -->
+  <footer>
+    © 2025 Control IoT Carrito | Moedano Mejia Julio Eduardo 20200197
+  </footer>
+
+  <!-- Modal para Crear Secuencia -->
+  <div class="modal fade" id="modalSecuencia" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content text-dark">
+        <div class="modal-header">
+          <h5 class="modal-title">Crear Nueva Secuencia</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+
+          <label>Nombre:</label>
+          <input id="nombre" type="text" class="form-control mb-2">
+
+          <label>Descripción:</label>
+          <textarea id="descripcion" class="form-control mb-2"></textarea>
+
+          <label>Agregar Movimiento:</label>
+          <div class="d-flex gap-2 mb-3">
+            <select id="selectMovimiento" class="form-select">
+              <option value="1">1 - Adelante</option>
+              <option value="2">2 - Atrás</option>
+              <option value="3">3 - Detener</option>
+              <option value="4">4 - Vuelta adelante derecha</option>
+              <option value="5">5 - Vuelta adelante izquierda</option>
+              <option value="6">6 - Vuelta atrás derecha</option>
+              <option value="7">7 - Vuelta atrás izquierda</option>
+              <option value="8">8 - Giro 90° derecha</option>
+              <option value="9">9 - Giro 90° izquierda</option>
+              <option value="10">10 - Giro 360° derecha</option>
+              <option value="11">11 - Giro 360° izquierda</option>
+            </select>
+            <button class="btn btn-primary" onclick="agregarMovimiento()">Agregar</button>
+          </div>
+
+          <ul id="listaMovimientos" class="list-group"></ul>
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-success" onclick="guardarSecuencia()">Guardar Secuencia</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/secuencia.js"></script>
+
+</body>
+</html>

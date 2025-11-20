@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control IoT Carrito</title>
+
+  <!-- BOOTSTRAP -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/control.css">
+</head>
+<body>
+
+<header>
+  <h2>Control IoT Carrito</h2>
+  <div>
+    <button class="btn btn-primary" onclick="location.href='index.html'">Control</button>
+    <button class="btn btn-primary" onclick="location.href='secuencia.html'">Secuencias</button>
+    <button class="btn btn-secondary" onclick="location.href='monitoreo.html'">Monitoreo</button>
+  </div>
+</header>
+
+<div class="layout-3">
+
+  <!-- MOVIMIENTOS -->
+  <div>
+    <div class="control-panel">
+      <div class="section-title">Movimientos principales</div>
+      <div class="control-grid">
+
+        <div></div>
+        <div>
+          <button class="btn-control btn-blue" 
+                  onmousedown="enviarMovimiento(1)" 
+                  onmouseup="detenerMovimiento()" 
+                  ontouchstart="enviarMovimiento(1)" 
+                  ontouchend="detenerMovimiento()">
+            <i class="bi bi-caret-up-fill"></i>
+          </button>
+          <div class="label">Adelante</div>
+        </div>
+        <div></div>
+
+        <div>
+          <button class="btn-control btn-blue" 
+                  onmousedown="enviarMovimiento(5)" 
+                  onmouseup="detenerMovimiento()" 
+                  ontouchstart="enviarMovimiento(5)" 
+                  ontouchend="detenerMovimiento()">
+            <i class="bi bi-arrow-up-left-circle-fill"></i>
+          </button>
+          <div class="label">Vuelta adelante izquierda</div>
+        </div>
+
+        <div>
+          <button class="btn-control btn-red" onclick="enviarMovimiento(3)"><i class="bi bi-stop-fill"></i></button>
+          <div class="label">Detener</div>
+        </div>
+
+        <div>
+          <button class="btn-control btn-blue" 
+                  onmousedown="enviarMovimiento(4)" 
+                  onmouseup="detenerMovimiento()" 
+                  ontouchstart="enviarMovimiento(4)" 
+                  ontouchend="detenerMovimiento()">
+            <i class="bi bi-arrow-up-right-circle-fill"></i>
+          </button>
+          <div class="label">Vuelta adelante derecha</div>
+        </div>
+
+        <div></div>
+        <div>
+          <button class="btn-control btn-blue" 
+                  onmousedown="enviarMovimiento(2)" 
+                  onmouseup="detenerMovimiento()" 
+                  ontouchstart="enviarMovimiento(2)" 
+                  ontouchend="detenerMovimiento()">
+            <i class="bi bi-caret-down-fill"></i>
+          </button>
+          <div class="label">Atrás</div>
+        </div>
+        <div></div>
+
+        <div>
+          <button class="btn-control btn-blue" 
+                  onmousedown="enviarMovimiento(7)" 
+                  onmouseup="detenerMovimiento()" 
+                  ontouchstart="enviarMovimiento(7)" 
+                  ontouchend="detenerMovimiento()">
+            <i class="bi bi-arrow-down-left-circle-fill"></i>
+          </button>
+          <div class="label">Vuelta atrás izquierda</div>
+        </div>
+
+        <div></div>
+
+        <div>
+          <button class="btn-control btn-blue" 
+                  onmousedown="enviarMovimiento(6)" 
+                  onmouseup="detenerMovimiento()" 
+                  ontouchstart="enviarMovimiento(6)" 
+                  ontouchend="detenerMovimiento()">
+            <i class="bi bi-arrow-down-right-circle-fill"></i>
+          </button>
+          <div class="label">Vuelta atrás derecha</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- GIROS -->
+  <div>
+    <div class="control-panel">
+      <div class="section-title">Giros 90°</div>
+
+      <div class="d-flex justify-content-around">
+        <div class="text-center">
+          <button class="btn-control btn-black" onclick="enviarMovimiento(9)"><i class="bi bi-arrow-counterclockwise"></i></button>
+          <div class="label">Giro 90° izquierda</div>
+        </div>
+
+        <div class="text-center">
+          <button class="btn-control btn-black" onclick="enviarMovimiento(8)"><i class="bi bi-arrow-clockwise"></i></button>
+          <div class="label">Giro 90° derecha</div>
+        </div>
+      </div>
+
+      <div class="section-title mt-3">Giros 360°</div>
+
+      <div class="d-flex justify-content-around">
+        <div class="text-center">
+          <button class="btn-control btn-white" onclick="enviarMovimiento(11)"><i class="bi bi-arrow-counterclockwise"></i></button>
+          <div class="label">Giro 360° izquierda</div>
+        </div>
+
+        <div class="text-center">
+          <button class="btn-control btn-white" onclick="enviarMovimiento(10)"><i class="bi bi-arrow-clockwise"></i></button>
+          <div class="label">Giro 360° derecha</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONITOREO + VELOCIDAD -->
+  <div class="monitor-panel">
+
+    <div class="monitor-title">Último Movimiento</div>
+    <div id="monitorMovimiento" class="monitor-box">
+      <div class="tag">Esperando datos...</div>
+    </div>
+
+    <div class="monitor-title mt-4">Último Obstáculo</div>
+    <div id="monitorObstaculo" class="monitor-box">
+      <div class="tag">Esperando datos...</div>
+    </div>
+
+    <div class="monitor-title mt-4">Control de Velocidad</div>
+
+    <div class="d-flex justify-content-around mt-3">
+      <button class="btn btn-warning px-4 py-2" onclick="enviarVelocidad(1)">
+        <i class="bi bi-speedometer2"></i> Bajo
+      </button>
+      <button class="btn btn-primary px-4 py-2" onclick="enviarVelocidad(2)">
+        <i class="bi bi-speedometer"></i> Normal
+      </button>
+      <button class="btn btn-danger px-4 py-2" onclick="enviarVelocidad(3)">
+        <i class="bi bi-speedometer2"></i> Alto
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2025 Control IoT Carrito | Moedano Mejía Julio Eduardo 20200197
+</footer>
+
+<script src="js/control.js"></script>
+</body>
+</html>
